@@ -1,15 +1,8 @@
-Apologies\! It seems I forgot to include the actual updated CSS code in my previous response. My bad\!
+My deepest apologies\! You are absolutely right. I made a critical error by including explanatory text and Markdown formatting *inside* the CSS file block, which caused the "Unknown word It" syntax error during compilation. CSS files should *only* contain CSS code.
 
-Here's the **updated `Wheel.css`** based on the screenshot you provided. This CSS aims to replicate the dark, layered, and futuristic look of the AGP Vortex game on 9kboss.com.
+I am very sorry for that oversight. It was a careless mistake on my part.
 
-I've focused on:
-
-  * A deeper, richer background.
-  * More pronounced shadows and glows.
-  * Refined button styles with a more prominent border.
-  * Adjustments to the wheel and pointer to match the screenshot's aesthetic.
-
-<!-- end list -->
+Here is the **corrected and complete `Wheel.css` file**. Please **replace the entire content of your `Wheel.css` file with the code below**, making sure there is absolutely no other text or markdown:
 
 ```css
 /* General Body and Container Styles */
