@@ -1,4 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap');
+/* Wheel.css - Matches Screenshot-Based Vortex Game UI */
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;700&display=swap');
 
 body {
   margin: 0;
@@ -8,60 +10,32 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  height: 100vh;
   overflow: hidden;
-  box-sizing: border-box;
-  background-size: cover;
 }
 
 .vortex-container {
-  background: linear-gradient(180deg, #151d27 0%, #0d1218 100%);
-  border-radius: 15px;
+  background: #151d27;
   padding: 30px;
-  box-shadow: 0 5px 25px rgba(0, 200, 255, 0.2), inset 0 0 10px rgba(0, 255, 255, 0.05);
+  border-radius: 16px;
+  box-shadow: 0 0 30px rgba(0, 200, 255, 0.1);
   text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 25px;
-  position: relative;
-  overflow: hidden;
-  width: 90%;
-  max-width: 450px;
   border: 1px solid rgba(0, 150, 200, 0.3);
-}
-
-.vortex-container::before {
-  content: '';
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  right: 5px;
-  bottom: 5px;
-  border: 1px solid rgba(0, 255, 255, 0.1);
-  border-radius: 12px;
-  pointer-events: none;
 }
 
 .vortex-title {
   font-family: 'Orbitron', sans-serif;
   font-size: 2.5em;
   color: #00ffff;
-  text-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
+  text-shadow: 0 0 8px rgba(0, 255, 255, 0.5);
   margin-bottom: 20px;
-  letter-spacing: 2px;
-  font-weight: 600;
-  text-transform: uppercase;
 }
 
 .wheel-wrapper {
   position: relative;
   width: 320px;
   height: 320px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 30px;
+  margin: 0 auto 20px;
 }
 
 .pointer {
@@ -76,18 +50,6 @@ body {
   border-bottom: 30px solid #FFD700;
   z-index: 10;
   filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.7));
-}
-
-.pointer::after {
-  content: '';
-  position: absolute;
-  bottom: -5px;
-  left: -8px;
-  width: 16px;
-  height: 16px;
-  background-color: #FFD700;
-  border-radius: 50%;
-  box-shadow: 0 0 5px rgba(255, 215, 0, 0.8);
 }
 
 .wheel {
@@ -109,11 +71,11 @@ body {
 }
 
 .wheel-svg text {
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 600;
-  fill: #ffffff;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: bold;
+  fill: #fff;
   font-size: 14px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
 }
 
 .center-button {
@@ -121,88 +83,57 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 120px;
-  height: 120px;
+  width: 100px;
+  height: 100px;
   background: linear-gradient(135deg, #00bfff, #007bff);
   border-radius: 50%;
-  border: 5px solid #0056b3;
+  border: 4px solid #0056b3;
   box-shadow: 0 0 20px rgba(0, 150, 255, 0.7), inset 0 0 10px rgba(255, 255, 255, 0.3);
-  z-index: 5;
   display: flex;
   justify-content: center;
   align-items: center;
   font-family: 'Orbitron', sans-serif;
-  font-size: 1.8em;
-  font-weight: 700;
+  font-size: 2.5em;
+  font-weight: bold;
   color: #fff;
-  text-transform: uppercase;
-  letter-spacing: 2px;
   text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
 }
 
-.center-button::before {
-  content: '';
-  position: absolute;
-  width: 80%;
-  height: 80%;
-  border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  box-shadow: inset 0 0 10px rgba(0, 255, 255, 0.3);
-}
-
 .spin-btn {
-  background: linear-gradient(180deg, #ff6b6b 0%, #e63946 100%);
+  background: linear-gradient(180deg, #9c27b0 0%, #6a1b9a 100%);
   color: #fff;
-  border: 2px solid #a02020;
-  padding: 15px 40px;
-  font-size: 1.6em;
-  font-weight: 700;
+  border: 2px solid #4a148c;
+  padding: 12px 30px;
+  font-size: 1.4em;
+  font-weight: bold;
   font-family: 'Orbitron', sans-serif;
-  border-radius: 10px;
+  border-radius: 12px;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  position: relative;
-  overflow: hidden;
-}
-
-.spin-btn:hover {
-  background: linear-gradient(180deg, #e63946 0%, #ff6b6b 100%);
-  box-shadow: 0 8px 20px rgba(255, 107, 107, 0.6);
+  box-shadow: 0 0 15px rgba(156, 39, 176, 0.6);
+  margin-bottom: 20px;
 }
 
 .spin-btn:disabled {
-  background: linear-gradient(180deg, #333 0%, #222 100%);
+  background: #333;
   border-color: #1a1a1a;
-  color: #888;
+  color: #aaa;
   cursor: not-allowed;
   box-shadow: none;
-  opacity: 0.8;
 }
 
-.balance, .result {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 1.4em;
-  font-weight: 600;
-  margin-top: 15px;
+.balance,
+.result {
+  font-size: 1.2em;
+  margin: 10px auto;
+  background: rgba(255, 255, 255, 0.05);
   padding: 10px 20px;
   border-radius: 8px;
-  background-color: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(4px);
   border: 1px solid rgba(0, 200, 255, 0.1);
-  box-shadow: inset 0 0 5px rgba(0, 200, 255, 0.03);
-  color: #a0a8b3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 150px;
 }
 
 .result {
   color: #FFD700;
-  animation: pulse 1.5s infinite ease-in-out;
+  animation: pulse 1.5s infinite;
 }
 
 @keyframes pulse {
@@ -211,81 +142,11 @@ body {
     box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
   }
   50% {
-    transform: scale(1.02);
+    transform: scale(1.05);
     box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
   }
   100% {
     transform: scale(1);
     box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
-  }
-}
-
-@media (max-width: 768px) {
-  .vortex-container {
-    padding: 25px;
-    gap: 20px;
-    max-width: 400px;
-  }
-  .vortex-title {
-    font-size: 2.2em;
-  }
-  .wheel-wrapper {
-    width: 280px;
-    height: 280px;
-  }
-  .center-button {
-    width: 100px;
-    height: 100px;
-    font-size: 1.6em;
-  }
-  .spin-btn {
-    padding: 12px 35px;
-    font-size: 1.4em;
-  }
-  .balance, .result {
-    font-size: 1.2em;
-    padding: 8px 15px;
-  }
-  .wheel-svg text {
-    font-size: 12px;
-  }
-}
-
-@media (max-width: 480px) {
-  .vortex-container {
-    padding: 20px;
-    gap: 15px;
-    border-radius: 12px;
-  }
-  .vortex-title {
-    font-size: 1.8em;
-    letter-spacing: 1.5px;
-  }
-  .wheel-wrapper {
-    width: 250px;
-    height: 250px;
-    margin-bottom: 20px;
-  }
-  .pointer {
-    border-left: 12px solid transparent;
-    border-right: 12px solid transparent;
-    border-bottom: 25px solid #FFD700;
-    top: -10px;
-  }
-  .wheel {
-    border-width: 6px;
-  }
-  .center-button {
-    width: 80px;
-    height: 80px;
-    font-size: 1.3em;
-  }
-  .spin-btn {
-    padding: 10px 25px;
-    font-size: 1.2em;
-  }
-  .balance, .result {
-    font-size: 1.1em;
-    padding: 6px 12px;
   }
 }
