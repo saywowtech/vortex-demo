@@ -1,4 +1,4 @@
-// App.js - Multi-Ring Vortex Spinner (All 3 Rings, Independent Spin)
+// App.js - Multi-Ring Vortex Spinner (All 3 Rings, Visible Circles + Independent Spin)
 
 import React, { useState, useRef } from 'react';
 import './Wheel.css';
@@ -40,8 +40,9 @@ export default function App() {
     }, 4000);
   };
 
-  const renderRing = (segments, radius, angle) => (
-    <g transform={`rotate(${angle}, 100, 100)`}>
+  const renderRing = (segments, radius, angle, ringClass) => (
+    <g transform={`rotate(${angle}, 100, 100)`} className={`ring ${ringClass}`}>
+      <circle cx="100" cy="100" r={radius} fill="none" stroke="#00ffff44" strokeWidth="2" />
       {segments.map((label, i) => {
         const r = (360 / segments.length) * i;
         const x = 100 + radius * Math.cos((r - 90) * Math.PI / 180);
@@ -70,9 +71,9 @@ export default function App() {
         <div className="pointer" />
         <div className="wheel">
           <svg className="wheel-svg" viewBox="0 0 200 200">
-            {renderRing(outerSegments, 80, angleOuter)}
-            {renderRing(middleSegments, 60, angleMiddle)}
-            {renderRing(innerSegments, 40, angleInner)}
+            {renderRing(outerSegments, 80, angleOuter, 'outer-ring')}
+            {renderRing(middleSegments, 60, angleMiddle, 'middle-ring')}
+            {renderRing(innerSegments, 40, angleInner, 'inner-ring')}
           </svg>
         </div>
         <div className="center-button">☁</div>
