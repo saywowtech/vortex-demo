@@ -26,7 +26,7 @@ const App = () => {
     ringRefs.forEach((ref, idx) => {
       if (ref.current) {
         ref.current.style.transition = `transform 4s ease-out`;
-        ref.current.style.transform = `translate(-50%, -50%) rotate(${rotations[idx]}deg)`;
+        ref.current.style.transform = `rotate(${rotations[idx]}deg)`;
       }
     });
 
@@ -69,13 +69,13 @@ const App = () => {
         <div className="pointer"></div>
 
         <div className="wheel">
-          <svg ref={ringRefs[0]} className="ring ring-1" viewBox="0 0 320 320">
+          <svg ref={ringRefs[0]} className="ring-svg ring-1" viewBox="0 0 320 320">
             {renderLabels(120)}
           </svg>
-          <svg ref={ringRefs[1]} className="ring ring-2" viewBox="0 0 320 320">
+          <svg ref={ringRefs[1]} className="ring-svg ring-2" viewBox="0 0 320 320">
             {renderLabels(90, 15)}
           </svg>
-          <svg ref={ringRefs[2]} className="ring ring-3" viewBox="0 0 320 320">
+          <svg ref={ringRefs[2]} className="ring-svg ring-3" viewBox="0 0 320 320">
             {renderLabels(60, 30)}
           </svg>
 
