@@ -1,57 +1,78 @@
-// App.js - Updated for Screenshot-Matching Vortex Spinner
+// App.js - Multi-Ring Vortex Spinner (All 3 Rings, Independent Spin)
 
 import React, { useState, useRef } from 'react';
 import './Wheel.css';
 
-const segments = ['3.9X', '2.5X', '1.55X', '12.5X', '7.7X', '28X', '52X', '85X', '27.5X', '10X', '13.3X', '44X', '200X', '+20.5X', 'BONUS', '+7X'];
+const outerSegments = ['52X', '85X', '27.5X', '10X', '13.3X', '44X', '200X', 'BONUS'];
+const middleSegments = ['3.9X', '2.5X', '1.55X', '12.5X', '7.7X', '28X', '+20.5X', '+7X'];
+const innerSegments = ['1X', '2X', '5X', '10X'];
 
 export default function App() {
-  const [angle, setAngle] = useState(0);
+  const [angleOuter, setAngleOuter] = useState(0);
+  const [angleMiddle, setAngleMiddle] = useState(0);
+  const [angleInner, setAngleInner] = useState(0);
   const [spinning, setSpinning] = useState(false);
   const [result, setResult] = useState(null);
-  const wheelRef = useRef();
 
   const spin = () => {
     if (spinning) return;
-    const segAngle = 360 / segments.length;
-    const index = Math.floor(Math.random() * segments.length);
-    const rotation = 360 * 5 + (index * segAngle) + segAngle / 2; // Offset fixed
-    setAngle(prev => prev + rotation);
+
+    const randomIndexOuter = Math.floor(Math.random() * outerSegments.length);
+    const randomIndexMiddle = Math.floor(Math.random() * middleSegments.length);
+    const randomIndexInner = Math.floor(Math.random() * innerSegments.length);
+
+    const outerSegAngle = 360 / outerSegments.length;
+    const middleSegAngle = 360 / middleSegments.length;
+    const innerSegAngle = 360 / innerSegments.length;
+
+    const rotationOuter = 360 * 5 + (randomIndexOuter * outerSegAngle) + outerSegAngle / 2;
+    const rotationMiddle = 360 * 5 + (randomIndexMiddle * middleSegAngle) + middleSegAngle / 2;
+    const rotationInner = 360 * 5 + (randomIndexInner * innerSegAngle) + innerSegAngle / 2;
+
+    setAngleOuter(prev => prev + rotationOuter);
+    setAngleMiddle(prev => prev + rotationMiddle);
+    setAngleInner(prev => prev + rotationInner);
     setSpinning(true);
+
     setTimeout(() => {
       setSpinning(false);
-      setResult(segments[index]);
+      setResult(`${outerSegments[randomIndexOuter]} | ${middleSegments[randomIndexMiddle]} | ${innerSegments[randomIndexInner]}`);
     }, 4000);
   };
+
+  const renderRing = (segments, radius, angle) => (
+    <g transform={`rotate(${angle}, 100, 100)`}>
+      {segments.map((label, i) => {
+        const r = (360 / segments.length) * i;
+        const x = 100 + radius * Math.cos((r - 90) * Math.PI / 180);
+        const y = 100 + radius * Math.sin((r - 90) * Math.PI / 180);
+        return (
+          <text
+            key={i}
+            x={x}
+            y={y}
+            textAnchor="middle"
+            alignmentBaseline="middle"
+            transform={`rotate(${r}, ${x}, ${y})`}
+            className={`ring-text ring-${radius}`}
+          >
+            {label}
+          </text>
+        );
+      })}
+    </g>
+  );
 
   return (
     <div className="vortex-container">
       <div className="vortex-title">VORTEX</div>
       <div className="wheel-wrapper">
         <div className="pointer" />
-        <div
-          className="wheel"
-          ref={wheelRef}
-          style={{ transform: `rotate(${angle}deg)` }}
-        >
+        <div className="wheel">
           <svg className="wheel-svg" viewBox="0 0 200 200">
-            {segments.map((label, i) => {
-              const r = (360 / segments.length) * i;
-              const x = 100 + 80 * Math.cos((r - 90) * Math.PI / 180);
-              const y = 100 + 80 * Math.sin((r - 90) * Math.PI / 180);
-              return (
-                <text
-                  key={i}
-                  x={x}
-                  y={y}
-                  textAnchor="middle"
-                  alignmentBaseline="middle"
-                  transform={`rotate(${r}, ${x}, ${y})`}
-                >
-                  {label}
-                </text>
-              );
-            })}
+            {renderRing(outerSegments, 80, angleOuter)}
+            {renderRing(middleSegments, 60, angleMiddle)}
+            {renderRing(innerSegments, 40, angleInner)}
           </svg>
         </div>
         <div className="center-button">☁</div>
