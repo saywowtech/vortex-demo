@@ -28,8 +28,10 @@ export default function VortexGame() {
     setSpinning(true);
     const anglePerSlice = 360 / outerRewards.length;
     const index = Math.floor(Math.random() * outerRewards.length);
+    const offsetCorrection = 2; // Arrow points to 90deg, fix for slice center
+    const correctedIndex = (index + offsetCorrection) % outerRewards.length;
     const extraSpins = 10;
-    const finalDeg = 360 * extraSpins + index * anglePerSlice;
+    const finalDeg = 360 * extraSpins + correctedIndex * anglePerSlice;
     setRotationDeg(finalDeg);
 
     if (spinSoundRef.current) spinSoundRef.current.play();
