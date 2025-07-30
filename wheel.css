@@ -1,0 +1,19 @@
+#wheel {
+  transition: transform 4s ease-out;
+  transform: rotate(0deg);
+}
+
+.segment {
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: black;
+  font-size: 12px;
+  text-align: center;
+  transform-origin: bottom center;
+}
