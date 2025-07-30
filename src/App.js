@@ -1,18 +1,17 @@
-// Vortex Coin Spin Game with Improved UI
-// Clean layout, centered segments, accurate pointer alignment
+// Vortex Coin Spin Game with SVG-based Neon UI
+// Real Vortex-style design with concentric rings and accurate pointer
 
 import React, { useState, useRef } from 'react';
-import './Wheel.css';
 
 const rewards = [
-  { label: '+50', value: 50, color: '#22c55e' },
-  { label: '+100', value: 100, color: '#16a34a' },
-  { label: '-30', value: -30, color: '#ef4444' },
-  { label: '+200', value: 200, color: '#fbbf24' },
-  { label: 'x2', multiplier: 2, color: '#3b82f6' },
-  { label: '-100', value: -100, color: '#dc2626' },
-  { label: '+10', value: 10, color: '#84cc16' },
-  { label: 'x0.5', multiplier: 0.5, color: '#f59e0b' }
+  { label: '4X', multiplier: 4, color: '#3b82f6' },
+  { label: '2X', multiplier: 2, color: '#10b981' },
+  { label: '0.5X', multiplier: 0.5, color: '#facc15' },
+  { label: '1.5X', multiplier: 1.5, color: '#f87171' },
+  { label: '3X', multiplier: 3, color: '#8b5cf6' },
+  { label: '10X', multiplier: 10, color: '#f472b6' },
+  { label: '5X', multiplier: 5, color: '#34d399' },
+  { label: '0X', multiplier: 0, color: '#ef4444' }
 ];
 
 export default function VortexGame() {
@@ -25,20 +24,15 @@ export default function VortexGame() {
     if (spinning) return;
     setSpinning(true);
     const index = Math.floor(Math.random() * rewards.length);
-    const degrees = 3600 + index * (360 / rewards.length);
+    const anglePerSlice = 360 / rewards.length;
+    const rotation = 3600 + index * anglePerSlice + anglePerSlice / 2;
     if (wheelRef.current) {
       wheelRef.current.style.transition = 'transform 4s ease-out';
-      wheelRef.current.style.transform = `rotate(${degrees}deg)`;
+      wheelRef.current.style.transform = `rotate(${rotation}deg)`;
     }
-
     setTimeout(() => {
       const reward = rewards[index];
-      let newBalance = balance;
-      if (reward.value !== undefined) {
-        newBalance += reward.value;
-      } else if (reward.multiplier) {
-        newBalance = Math.floor(balance * reward.multiplier);
-      }
+      const newBalance = Math.floor(balance * reward.multiplier);
       setBalance(newBalance);
       setResult(reward.label);
       setSpinning(false);
@@ -46,45 +40,63 @@ export default function VortexGame() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-indigo-900 to-indigo-700 text-white p-4">
-      <h1 className="text-3xl font-bold mb-6">🎡 Vortex Spin Game</h1>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-gray-900 to-black text-white">
+      <h1 className="text-3xl font-bold mb-6">🎯 Vortex Coin Spin</h1>
 
-      <div className="relative w-[320px] h-[320px] mb-8">
-        <div
-          ref={wheelRef}
-          id="wheel"
-          className="absolute w-full h-full rounded-full border-[10px] border-white overflow-hidden"
-        >
-          {rewards.map((seg, i) => (
-            <div
-              key={i}
-              className="absolute w-full h-full flex items-center justify-start"
-              style={{
-                transform: `rotate(${(360 / rewards.length) * i}deg)`
-              }}
-            >
-              <div
-                className="h-1/2 w-1/2 flex items-center justify-center text-sm font-bold text-black"
-                style={{
-                  backgroundColor: seg.color,
-                  clipPath: 'polygon(0% 0%, 100% 0%, 50% 100%)',
-                  transform: `rotate(${360 / rewards.length / 2}deg)` // center the text inside segment
-                }}
-              >
-                {seg.label}
-              </div>
-            </div>
-          ))}
+      <div className="relative w-[340px] h-[340px]">
+        <div className="absolute top-[calc(50%-8px)] left-1/2 transform -translate-x-1/2 z-20">
+          <div className="w-0 h-0 border-l-[10px] border-r-[10px] border-b-[20px] border-l-transparent border-r-transparent border-b-purple-500 drop-shadow-lg"></div>
         </div>
 
-        <div className="absolute top-[-14px] left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[12px] border-r-[12px] border-b-[24px] border-l-transparent border-r-transparent border-b-yellow-300 z-10" />
+        <svg
+          ref={wheelRef}
+          viewBox="0 0 200 200"
+          className="w-full h-full transition-transform duration-1000 drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]"
+        >
+          <g transform="translate(100,100)">
+            {rewards.map((r, i) => {
+              const startAngle = (360 / rewards.length) * i;
+              const endAngle = startAngle + 360 / rewards.length;
+              const largeArc = endAngle - startAngle > 180 ? 1 : 0;
+              const x1 = 90 * Math.cos((Math.PI * startAngle) / 180);
+              const y1 = 90 * Math.sin((Math.PI * startAngle) / 180);
+              const x2 = 90 * Math.cos((Math.PI * endAngle) / 180);
+              const y2 = 90 * Math.sin((Math.PI * endAngle) / 180);
+              return (
+                <g key={i}>
+                  <path
+                    d={`M0,0 L${x1},${y1} A90,90 0 ${largeArc} 1 ${x2},${y2} Z`}
+                    fill={r.color}
+                    stroke="black"
+                    strokeWidth="0.5"
+                  />
+                  <text
+                    x={(70 * Math.cos(Math.PI * (startAngle + 360 / rewards.length / 2) / 180)).toFixed(2)}
+                    y={(70 * Math.sin(Math.PI * (startAngle + 360 / rewards.length / 2) / 180)).toFixed(2)}
+                    textAnchor="middle"
+                    alignmentBaseline="middle"
+                    fontSize="8"
+                    fill="black"
+                    transform={`rotate(${startAngle + 360 / rewards.length / 2},${
+                      70 * Math.cos(Math.PI * (startAngle + 360 / rewards.length / 2) / 180)
+                    },${
+                      70 * Math.sin(Math.PI * (startAngle + 360 / rewards.length / 2) / 180)
+                    })`}
+                  >
+                    {r.label}
+                  </text>
+                </g>
+              );
+            })}
+          </g>
+        </svg>
       </div>
 
       <button
-        className="bg-yellow-400 text-black font-bold px-6 py-2 rounded-full hover:bg-yellow-300 disabled:opacity-50"
+        className="mt-8 bg-purple-600 hover:bg-purple-500 text-white font-bold py-2 px-6 rounded-full shadow-xl disabled:opacity-50"
         onClick={spinWheel} disabled={spinning}
       >
-        {spinning ? 'Spinning...' : 'Spin Now'}
+        {spinning ? 'Spinning...' : 'SPIN'}
       </button>
 
       <div className="mt-4 text-xl">Balance: <strong>{balance}</strong> coins</div>
