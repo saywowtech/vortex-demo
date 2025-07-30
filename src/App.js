@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Wheel.css';
 
-const segments = Array.from({ length: 12 }, (_, i) => i + 1); // [1...12]
+const segments = Array.from({ length: 12 }, (_, i) => i + 1);
 
 const App = () => {
   const [spinning, setSpinning] = useState(false);
@@ -10,55 +10,40 @@ const App = () => {
 
   const handleSpin = () => {
     if (spinning || balance < 10) return;
+
     setSpinning(true);
-    setBalance((prev) => prev - 10);
+    setBalance(prev => prev - 10);
     setResult('');
 
     setTimeout(() => {
-      const reward = Math.floor(Math.random() * 50) + 10;
+      const reward = Math.floor(Math.random() * 40) + 10;
       setResult(`You won ${reward} coins!`);
-      setBalance((prev) => prev + reward);
+      setBalance(prev => prev + reward);
       setSpinning(false);
     }, 4000);
   };
 
-  const renderRing = (radius, duration, className) => (
-    <svg
-      className={`ring-svg ${className}`}
-      viewBox="0 0 200 200"
-      style={{
-        animationDuration: duration,
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%) rotate(0deg)',
-        width: '100%',
-        height: '100%',
-        pointerEvents: 'none',
-      }}
-    >
-      {segments.map((num, i) => {
-        const angle = (360 / segments.length) * i;
-        const rad = (angle * Math.PI) / 180;
-        const x = 100 + radius * Math.cos(rad);
-        const y = 100 + radius * Math.sin(rad);
-        return (
-          <text
-            key={i}
-            x={x}
-            y={y}
-            textAnchor="middle"
-            dominantBaseline="middle"
-            fill="#00ffff"
-            fontSize="14"
-            fontWeight="bold"
-          >
-            {num}
-          </text>
-        );
-      })}
-    </svg>
-  );
+  const renderLabels = (radius, fontSize, offset = 0) => {
+    return segments.map((num, i) => {
+      const angle = ((360 / segments.length) * i - 90 + offset) * (Math.PI / 180);
+      const x = 160 + radius * Math.cos(angle);
+      const y = 160 + radius * Math.sin(angle);
+      return (
+        <text
+          key={`${radius}-${num}`}
+          x={x}
+          y={y}
+          fill="#00ffff"
+          textAnchor="middle"
+          dominantBaseline="middle"
+          fontSize={fontSize}
+          fontWeight="bold"
+        >
+          {num}
+        </text>
+      );
+    });
+  };
 
   return (
     <div className="vortex-container">
@@ -66,10 +51,17 @@ const App = () => {
 
       <div className="wheel-wrapper">
         <div className="pointer"></div>
+
         <div className="wheel">
-          {renderRing(85, '6s', 'ring-1')}
-          {renderRing(65, '4s', 'ring-2')}
-          {renderRing(45, '3s', 'ring-3')}
+          <svg className="ring ring-1" viewBox="0 0 320 320">
+            {renderLabels(130, 14)}
+          </svg>
+          <svg className="ring ring-2" viewBox="0 0 320 320">
+            {renderLabels(100, 12, 15)}
+          </svg>
+          <svg className="ring ring-3" viewBox="0 0 320 320">
+            {renderLabels(70, 11, 30)}
+          </svg>
           <div className="center-button">V</div>
         </div>
       </div>
