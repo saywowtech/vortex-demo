@@ -1,22 +1,54 @@
-import { Plus, Minus, RotateCcw } from 'lucide-react'
+import { useState, useRef } from 'react';
+import { Plus, Minus, RotateCcw } from 'lucide-react';
 
-const App = (props) => {
-  const { minimumAmount = 5, currency = '₹' } = props
+const App = ({ minimumAmount = 5, currency = '₹' }) => {
+  const [isSpinning, setIsSpinning] = useState(false);
+  const outerRef = useRef();
+  const middleRef = useRef();
+  const innerRef = useRef();
 
-  const wheelMultipliers = [
-    { value: '3.9X', color: 'text-orange-400' },
-    { value: '2.5X', color: 'text-green-400' },
-    { value: '1.5X', color: 'text-blue-400' },
-    { value: '12.5X', color: 'text-purple-400' },
-    { value: '200X', color: 'text-red-400' },
-    { value: '44X', color: 'text-yellow-400' },
-    { value: '1.35X', color: 'text-cyan-400' },
-    { value: '27.5X', color: 'text-pink-400' },
-    { value: '85X', color: 'text-green-300' },
-    { value: '52X', color: 'text-blue-300' },
-    { value: '16X', color: 'text-orange-300' },
-    { value: '4.35X', color: 'text-purple-300' }
-  ]
+  const multipliers = [
+    '3.9X', '2.5X', '1.5X', '12.5X', '200X', '44X',
+    '1.35X', '27.5X', '85X', '52X', '16X', '4.35X'
+  ];
+
+  const spin = () => {
+    if (isSpinning) return;
+    setIsSpinning(true);
+
+    const randomDeg = () => 360 * 5 + Math.floor(Math.random() * 360);
+
+    outerRef.current.style.transition = 'transform 4s ease-out';
+    outerRef.current.style.transform = `rotate(${randomDeg()}deg)`;
+
+    middleRef.current.style.transition = 'transform 4s ease-out';
+    middleRef.current.style.transform = `rotate(${randomDeg()}deg)`;
+
+    innerRef.current.style.transition = 'transform 4s ease-out';
+    innerRef.current.style.transform = `rotate(${randomDeg()}deg)`;
+
+    setTimeout(() => setIsSpinning(false), 4000);
+  };
+
+  const renderLabels = (radius, size = 'text-sm') => (
+    multipliers.map((value, index) => {
+      const angle = (index * 30 - 90) * (Math.PI / 180);
+      const x = Math.cos(angle) * radius;
+      const y = Math.sin(angle) * radius;
+      return (
+        <div
+          key={`${radius}-${index}`}
+          className={`absolute ${size} font-bold text-white`}
+          style={{
+            left: `calc(50% + ${x}px - 20px)`,
+            top: `calc(50% + ${y}px - 10px)`
+          }}
+        >
+          {value}
+        </div>
+      );
+    })
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white relative overflow-hidden">
@@ -33,35 +65,35 @@ const App = (props) => {
 
         <div className="flex-1 flex justify-center">
           <div className="relative w-96 h-96">
-            <div className="absolute inset-0 rounded-full border-4 border-gray-600 bg-gradient-to-br from-gray-800 to-gray-900 animate-spin-slow">
-              {wheelMultipliers.map((item, index) => {
-                const angle = (index * 30) - 90
-                const radius = 170
-                const x = Math.cos(angle * Math.PI / 180) * radius
-                const y = Math.sin(angle * Math.PI / 180) * radius
-                return (
-                  <div
-                    key={index}
-                    className={`absolute text-sm font-bold ${item.color}`}
-                    style={{
-                      left: `calc(50% + ${x}px - 20px)`,
-                      top: `calc(50% + ${y}px - 10px)`
-                    }}
-                  >
-                    {item.value}
-                  </div>
-                )
-              })}
+            {/* Outer ring */}
+            <div
+              ref={outerRef}
+              className="absolute inset-0 rounded-full border-4 border-gray-600 bg-gradient-to-br from-gray-800 to-gray-900"
+            >
+              {renderLabels(150)}
             </div>
 
-            <div className="absolute inset-8 rounded-full border-4 border-gray-700 bg-gradient-to-br from-gray-700 to-gray-800"></div>
-            <div className="absolute inset-16 rounded-full border-4 border-gray-600 bg-gradient-to-br from-gray-600 to-gray-700">
+            {/* Middle ring */}
+            <div
+              ref={middleRef}
+              className="absolute inset-8 rounded-full border-4 border-gray-700 bg-gradient-to-br from-gray-700 to-gray-800"
+            >
+              {renderLabels(110, 'text-xs')}
+            </div>
+
+            {/* Inner ring */}
+            <div
+              ref={innerRef}
+              className="absolute inset-16 rounded-full border-4 border-gray-600 bg-gradient-to-br from-gray-600 to-gray-700"
+            >
+              {renderLabels(70, 'text-[10px]')}
               <div className="absolute inset-8 rounded-full bg-gradient-to-br from-gray-500 to-gray-600 flex items-center justify-center">
                 <div className="w-12 h-12 bg-gray-400 rounded-full flex items-center justify-center">
                   <div className="w-6 h-6 bg-gray-300 rounded-full"></div>
                 </div>
               </div>
             </div>
+
             <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-700 px-4 py-1 rounded-full text-sm font-semibold shadow-md">
               BONUS
             </div>
@@ -97,7 +129,11 @@ const App = (props) => {
             </div>
 
             <div className="flex justify-center">
-              <button className="w-32 h-32 bg-gradient-to-br from-purple-600 to-purple-800 hover:from-purple-500 hover:to-purple-700 rounded-full flex flex-col items-center justify-center text-white font-bold transition-all transform hover:scale-105">
+              <button
+                onClick={spin}
+                disabled={isSpinning}
+                className="w-32 h-32 bg-gradient-to-br from-purple-600 to-purple-800 hover:from-purple-500 hover:to-purple-700 rounded-full flex flex-col items-center justify-center text-white font-bold transition-all transform hover:scale-105"
+              >
                 <div className="text-xs">HOLD TO</div>
                 <div className="text-lg">SPIN</div>
                 <div className="w-8 h-8 border-2 border-white rounded-full mt-1 flex items-center justify-center">
@@ -120,7 +156,7 @@ const App = (props) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
