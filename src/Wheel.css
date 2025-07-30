@@ -1,98 +1,88 @@
 .vortex-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: radial-gradient(ellipse at center, #1a1a1a 0%, #000000 100%);
+  background: radial-gradient(circle at center, #121212, #0b0c10);
+  color: #fff;
   min-height: 100vh;
-  padding: 20px;
-  font-family: 'Segoe UI', sans-serif;
-  color: white;
+  font-family: 'Orbitron', sans-serif;
+  text-align: center;
+  padding: 40px 20px;
+  overflow: hidden;
 }
 
 .vortex-title {
-  font-size: 36px;
-  margin-bottom: 30px;
-  color: #FFD93D;
-  text-shadow: 0 0 10px #FFD700;
+  font-size: 32px;
+  color: #d4af37;
+  margin-bottom: 20px;
 }
 
 .wheel-wrapper {
   position: relative;
-  width: 320px;
-  height: 320px;
+  display: inline-block;
+  width: 300px;
+  height: 300px;
+  margin: 20px auto;
 }
 
 .pointer {
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 25px solid #fff;
   position: absolute;
   top: -25px;
   left: 50%;
   transform: translateX(-50%);
-  width: 0;
-  height: 0;
-  border-left: 20px solid transparent;
-  border-right: 20px solid transparent;
-  border-bottom: 35px solid #FFD700;
   z-index: 10;
-  filter: drop-shadow(0 0 10px #FFD700);
+  filter: drop-shadow(0 0 5px #fff);
 }
 
 .wheel {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  border: 6px solid #FFD700;
-  box-shadow: 0 0 30px rgba(255, 217, 61, 0.6);
-  background-color: #111;
+  transition: transform 4s ease-out;
   position: relative;
-  overflow: hidden;
+  box-shadow: 0 0 30px #222 inset;
 }
 
 .wheel-svg {
   width: 100%;
   height: 100%;
+  transform: rotate(0deg);
 }
 
 .center-button {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 80px;
-  height: 80px;
-  background: radial-gradient(#FFD93D, #FF4C60);
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle, #ff00ff, #5500aa);
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  box-shadow: 0 0 25px #FFD700, 0 0 15px #FF4C60;
-  animation: pulse 1.5s infinite ease-in-out;
-  z-index: 5;
-}
-
-@keyframes pulse {
-  0% { box-shadow: 0 0 15px #FFD700; }
-  50% { box-shadow: 0 0 25px #FF4C60, 0 0 20px #FFD700; }
-  100% { box-shadow: 0 0 15px #FFD700; }
+  box-shadow: 0 0 10px #aa00ff, 0 0 20px #ff00ff;
 }
 
 .spin-btn {
-  margin-top: 25px;
-  padding: 14px 32px;
-  font-size: 18px;
-  background: linear-gradient(to right, #FF4C60, #FFD700);
+  margin-top: 30px;
+  padding: 15px 30px;
+  font-size: 16px;
+  font-weight: bold;
+  background: #8a2be2;
   border: none;
-  border-radius: 30px;
-  color: white;
+  color: #fff;
   cursor: pointer;
-  transition: 0.3s;
-  box-shadow: 0 0 10px #ff4c60;
+  border-radius: 25px;
+  box-shadow: 0 0 10px #8a2be2;
+  transition: 0.3s ease;
 }
-
 .spin-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 18px #FFD700;
+  background: #a34cf0;
+  box-shadow: 0 0 15px #a34cf0;
 }
 
-.balance,
-.result {
+.balance, .result {
   margin-top: 20px;
   font-size: 18px;
-  color: #fff;
+  color: #ccc;
 }
