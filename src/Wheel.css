@@ -155,27 +155,4 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     width: 120px; /* Larger central area */
-    height: 120px;
-    background: linear-gradient(135deg, #00bfff, #007bff); /* Blue gradient */
-    border-radius: 50%;
-    border: 5px solid #0056b3; /* Darker blue border */
-    box-shadow: 0 0 20px rgba(0, 150, 255, 0.7), inset 0 0 10px rgba(255, 255, 255, 0.3);
-    z-index: 5;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: 'Orbitron', sans-serif; /* Futuristic font */
-    font-size: 1.8em; /* "VORTEX" text size */
-    font-weight: 700;
-    color: #fff;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-}
-
-/* Inner concentric circle for "VORTEX" */
-.center-button::before {
-    content: '';
-    position: absolute;
-    width: 80%; /* Smaller inner circle */
-    height:
+    height: 120
