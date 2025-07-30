@@ -143,3 +143,199 @@ body {
 .wheel-svg text {
     font-family: 'Montserrat', sans-serif;
     font-weight: 600; /* Slightly bolder */
+    fill: #ffffff;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+    font-size: 14px; /* Adjusted size for screenshot */
+}
+
+/* Center Button of the Wheel (The "VORTEX" part) */
+.center-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120px; /* Larger central area */
+    height: 120px;
+    background: linear-gradient(135deg, #00bfff, #007bff); /* Blue gradient */
+    border-radius: 50%;
+    border: 5px solid #0056b3; /* Darker blue border */
+    box-shadow: 0 0 20px rgba(0, 150, 255, 0.7), inset 0 0 10px rgba(255, 255, 255, 0.3);
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Orbitron', sans-serif; /* Futuristic font */
+    font-size: 1.8em; /* "VORTEX" text size */
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+/* Inner concentric circle for "VORTEX" */
+.center-button::before {
+    content: '';
+    position: absolute;
+    width: 80%; /* Smaller inner circle */
+    height: 80%;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.2); /* Subtle inner white border */
+    box-shadow: inset 0 0 10px rgba(0, 255, 255, 0.3);
+}
+
+
+/* Spin Button (The "HOLD TO SPIN" button) */
+.spin-btn {
+    background: linear-gradient(180deg, #ff6b6b 0%, #e63946 100%); /* Red gradient */
+    color: #fff;
+    border: 2px solid #a02020; /* Darker red border */
+    padding: 15px 40px;
+    font-size: 1.6em;
+    font-weight: 700;
+    font-family: 'Orbitron', sans-serif; /* Futuristic font for button */
+    border-radius: 10px; /* Slightly squarer corners for button */
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    position: relative;
+    overflow: hidden; /* For potential hover effects */
+}
+
+.spin-btn::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    transform: scale(0);
+    transition: all 0.4s ease-out;
+    opacity: 0;
+}
+
+.spin-btn:hover::before {
+    width: 200%;
+    height: 200%;
+    transform: scale(1);
+    opacity: 1;
+}
+
+.spin-btn:hover {
+    background: linear-gradient(180deg, #e63946 0%, #ff6b6b 100%);
+    box-shadow: 0 8px 20px rgba(255, 107, 107, 0.6);
+}
+
+.spin-btn:disabled {
+    background: linear-gradient(180deg, #333 0%, #222 100%);
+    border-color: #1a1a1a;
+    color: #888;
+    cursor: not-allowed;
+    box-shadow: none;
+    opacity: 0.8;
+    transform: none;
+}
+
+/* Balance and Result Displays (These will be your balance, min amount, etc.) */
+.balance, .result {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.4em;
+    font-weight: 600;
+    margin-top: 15px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.05); /* Very subtle transparent background */
+    backdrop-filter: blur(4px); /* Gentle blur */
+    border: 1px solid rgba(0, 200, 255, 0.1);
+    box-shadow: inset 0 0 5px rgba(0, 200, 255, 0.03); /* Very subtle inner glow */
+    color: #a0a8b3; /* Softer text color */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 150px; /* Ensure consistent width */
+}
+
+/* This is if you wrap the value in a span, e.g., <div>Balance: <span class="value">{balance}</span> coins</div> */
+.balance .value {
+    color: #00ffff; /* Bright cyan for the actual value */
+    font-weight: 700;
+    font-size: 1.1em;
+    margin-left: 8px;
+}
+
+.result {
+    color: #FFD700; /* Gold for result */
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+/* Keyframe for Result Pulse */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+    }
+    50% {
+        transform: scale(1.02);
+        box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+    }
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .vortex-container {
+        padding: 25px;
+        gap: 20px;
+        max-width: 400px;
+    }
+    .vortex-title {
+        font-size: 2.2em;
+    }
+    .wheel-wrapper {
+        width: 280px;
+        height: 280px;
+    }
+    .center-button {
+        width: 100px;
+        height: 100px;
+        font-size: 1.6em;
+    }
+    .spin-btn {
+        padding: 12px 35px;
+        font-size: 1.4em;
+    }
+    .balance, .result {
+        font-size: 1.2em;
+        padding: 8px 15px;
+    }
+    .wheel-svg text {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .vortex-container {
+        padding: 20px;
+        gap: 15px;
+        border-radius: 12px;
+    }
+    .vortex-title {
+        font-size: 1.8em;
+        letter-spacing: 1.5px;
+    }
+    .wheel-wrapper {
+        width: 250px;
+        height: 250px;
+        margin-bottom: 20px;
+    }
+    .pointer {
+        border-left: 12px solid transparent;
+        border-right:
