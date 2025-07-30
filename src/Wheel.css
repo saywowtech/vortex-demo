@@ -1,10 +1,3 @@
-My deepest apologies\! You are absolutely right. I made a critical error by including explanatory text and Markdown formatting *inside* the CSS file block, which caused the "Unknown word It" syntax error during compilation. CSS files should *only* contain CSS code.
-
-I am very sorry for that oversight. It was a careless mistake on my part.
-
-Here is the **corrected and complete `Wheel.css` file**. Please **replace the entire content of your `Wheel.css` file with the code below**, making sure there is absolutely no other text or markdown:
-
-```css
 /* General Body and Container Styles */
 body {
     margin: 0;
@@ -277,4 +270,3 @@ body {
         padding: 10px 20px;
     }
 }
-```
