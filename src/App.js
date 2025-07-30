@@ -1,7 +1,6 @@
-// Vortex Coin Spin Game with SVG-based Neon UI
-// Real Vortex-style design with concentric rings and accurate pointer
+// Vortex Coin Spin Game with SVG-based Neon UI and Background Music
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 const rewards = [
   { label: '4X', multiplier: 4, color: '#3b82f6' },
@@ -19,13 +18,26 @@ export default function VortexGame() {
   const [result, setResult] = useState(null);
   const [spinning, setSpinning] = useState(false);
   const wheelRef = useRef(null);
+  const audioRef = useRef(null);
+
+  useEffect(() => {
+    // Autoplay background music once interaction happens
+    const playMusic = () => {
+      if (audioRef.current) {
+        audioRef.current.play().catch(() => {});
+        document.removeEventListener('click', playMusic);
+      }
+    };
+    document.addEventListener('click', playMusic);
+    return () => document.removeEventListener('click', playMusic);
+  }, []);
 
   const spinWheel = () => {
     if (spinning) return;
     setSpinning(true);
     const index = Math.floor(Math.random() * rewards.length);
     const anglePerSlice = 360 / rewards.length;
-    const rotation = 3600 + index * anglePerSlice + anglePerSlice / 2;
+    const rotation = 3600 - (index * anglePerSlice + anglePerSlice / 2); // Pointer fixed at top (0deg)
     if (wheelRef.current) {
       wheelRef.current.style.transition = 'transform 4s ease-out';
       wheelRef.current.style.transform = `rotate(${rotation}deg)`;
@@ -41,11 +53,13 @@ export default function VortexGame() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-gray-900 to-black text-white">
+      <audio ref={audioRef} loop src="https://cdn.pixabay.com/download/audio/2023/03/26/audio_1096c2a81a.mp3?filename=8-bit-loop-145850.mp3" />
+
       <h1 className="text-3xl font-bold mb-6">🎯 Vortex Coin Spin</h1>
 
       <div className="relative w-[340px] h-[340px]">
         <div className="absolute top-[calc(50%-8px)] left-1/2 transform -translate-x-1/2 z-20">
-          <div className="w-0 h-0 border-l-[10px] border-r-[10px] border-b-[20px] border-l-transparent border-r-transparent border-b-purple-500 drop-shadow-lg"></div>
+          <div className="w-0 h-0 border-l-[10px] border-r-[10px] border-b-[20px] border-l-transparent border-r-transparent border-b-yellow-300 drop-shadow-lg"></div>
         </div>
 
         <svg
@@ -62,6 +76,7 @@ export default function VortexGame() {
               const y1 = 90 * Math.sin((Math.PI * startAngle) / 180);
               const x2 = 90 * Math.cos((Math.PI * endAngle) / 180);
               const y2 = 90 * Math.sin((Math.PI * endAngle) / 180);
+              const textAngle = startAngle + (360 / rewards.length) / 2;
               return (
                 <g key={i}>
                   <path
@@ -71,17 +86,12 @@ export default function VortexGame() {
                     strokeWidth="0.5"
                   />
                   <text
-                    x={(70 * Math.cos(Math.PI * (startAngle + 360 / rewards.length / 2) / 180)).toFixed(2)}
-                    y={(70 * Math.sin(Math.PI * (startAngle + 360 / rewards.length / 2) / 180)).toFixed(2)}
+                    x={(60 * Math.cos(Math.PI * textAngle / 180)).toFixed(2)}
+                    y={(60 * Math.sin(Math.PI * textAngle / 180)).toFixed(2)}
                     textAnchor="middle"
                     alignmentBaseline="middle"
                     fontSize="8"
                     fill="black"
-                    transform={`rotate(${startAngle + 360 / rewards.length / 2},${
-                      70 * Math.cos(Math.PI * (startAngle + 360 / rewards.length / 2) / 180)
-                    },${
-                      70 * Math.sin(Math.PI * (startAngle + 360 / rewards.length / 2) / 180)
-                    })`}
                   >
                     {r.label}
                   </text>
