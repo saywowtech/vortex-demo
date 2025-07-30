@@ -30,7 +30,7 @@ const App = ({ minimumAmount = 5, currency = '₹' }) => {
     setTimeout(() => setIsSpinning(false), 4000);
   };
 
-  const renderLabels = (radius, size = 'text-sm') => (
+  const renderLabels = (radius, size = 'text-sm') =>
     multipliers.map((value, index) => {
       const angle = (index * 30 - 90) * (Math.PI / 180);
       const x = Math.cos(angle) * radius;
@@ -40,15 +40,35 @@ const App = ({ minimumAmount = 5, currency = '₹' }) => {
           key={`${radius}-${index}`}
           className={`absolute ${size} font-bold text-white`}
           style={{
-            left: `calc(50% + ${x}px - 20px)`,
-            top: `calc(50% + ${y}px - 10px)`
+            left: `calc(50% + ${x}px - 18px)`,
+            top: `calc(50% + ${y}px - 12px)`,
+            width: '36px',
+            textAlign: 'center',
           }}
         >
           {value}
         </div>
       );
-    })
-  );
+    });
+
+  const renderSegments = (count, radius) => {
+    const lines = [];
+    for (let i = 0; i < count; i++) {
+      const angle = (i * 360) / count;
+      const rotate = `rotate(${angle}deg)`;
+      lines.push(
+        <div
+          key={i}
+          className="absolute left-1/2 top-1/2 w-px h-[48%] bg-gray-700"
+          style={{
+            transform: `${rotate} translateY(-50%)`,
+            transformOrigin: 'bottom center',
+          }}
+        />
+      );
+    }
+    return lines;
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white relative overflow-hidden">
@@ -71,6 +91,7 @@ const App = ({ minimumAmount = 5, currency = '₹' }) => {
               className="absolute inset-0 rounded-full border-4 border-gray-600 bg-gradient-to-br from-gray-800 to-gray-900"
             >
               {renderLabels(150)}
+              {renderSegments(12, 150)}
             </div>
 
             {/* Middle ring */}
@@ -79,6 +100,7 @@ const App = ({ minimumAmount = 5, currency = '₹' }) => {
               className="absolute inset-8 rounded-full border-4 border-gray-700 bg-gradient-to-br from-gray-700 to-gray-800"
             >
               {renderLabels(110, 'text-xs')}
+              {renderSegments(12, 110)}
             </div>
 
             {/* Inner ring */}
@@ -87,6 +109,7 @@ const App = ({ minimumAmount = 5, currency = '₹' }) => {
               className="absolute inset-16 rounded-full border-4 border-gray-600 bg-gradient-to-br from-gray-600 to-gray-700"
             >
               {renderLabels(70, 'text-[10px]')}
+              {renderSegments(12, 70)}
               <div className="absolute inset-8 rounded-full bg-gradient-to-br from-gray-500 to-gray-600 flex items-center justify-center">
                 <div className="w-12 h-12 bg-gray-400 rounded-full flex items-center justify-center">
                   <div className="w-6 h-6 bg-gray-300 rounded-full"></div>
