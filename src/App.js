@@ -1,6 +1,6 @@
-// App.js - Multi-Ring Vortex Spinner (All 3 Rings, Visible Circles + Independent Spin)
+// App.js – Vortex 3-Ring Spinner with Proper Segments and Arrow
 
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import './Wheel.css';
 
 const outerSegments = ['52X', '85X', '27.5X', '10X', '13.3X', '44X', '200X', 'BONUS'];
@@ -17,52 +17,75 @@ export default function App() {
   const spin = () => {
     if (spinning) return;
 
-    const randomIndexOuter = Math.floor(Math.random() * outerSegments.length);
-    const randomIndexMiddle = Math.floor(Math.random() * middleSegments.length);
-    const randomIndexInner = Math.floor(Math.random() * innerSegments.length);
+    const randOuter = Math.floor(Math.random() * outerSegments.length);
+    const randMiddle = Math.floor(Math.random() * middleSegments.length);
+    const randInner = Math.floor(Math.random() * innerSegments.length);
 
-    const outerSegAngle = 360 / outerSegments.length;
-    const middleSegAngle = 360 / middleSegments.length;
-    const innerSegAngle = 360 / innerSegments.length;
+    const degOuter = 360 / outerSegments.length;
+    const degMiddle = 360 / middleSegments.length;
+    const degInner = 360 / innerSegments.length;
 
-    const rotationOuter = 360 * 5 + (randomIndexOuter * outerSegAngle) + outerSegAngle / 2;
-    const rotationMiddle = 360 * 5 + (randomIndexMiddle * middleSegAngle) + middleSegAngle / 2;
-    const rotationInner = 360 * 5 + (randomIndexInner * innerSegAngle) + innerSegAngle / 2;
+    const rotateOuter = 360 * 5 + randOuter * degOuter + degOuter / 2;
+    const rotateMiddle = 360 * 5 + randMiddle * degMiddle + degMiddle / 2;
+    const rotateInner = 360 * 5 + randInner * degInner + degInner / 2;
 
-    setAngleOuter(prev => prev + rotationOuter);
-    setAngleMiddle(prev => prev + rotationMiddle);
-    setAngleInner(prev => prev + rotationInner);
+    setAngleOuter(prev => prev + rotateOuter);
+    setAngleMiddle(prev => prev + rotateMiddle);
+    setAngleInner(prev => prev + rotateInner);
     setSpinning(true);
 
     setTimeout(() => {
       setSpinning(false);
-      setResult(`${outerSegments[randomIndexOuter]} | ${middleSegments[randomIndexMiddle]} | ${innerSegments[randomIndexInner]}`);
+      setResult(`${outerSegments[randOuter]} | ${middleSegments[randMiddle]} | ${innerSegments[randInner]}`);
     }, 4000);
   };
 
-  const renderRing = (segments, radius, angle, ringClass) => (
-    <g transform={`rotate(${angle}, 100, 100)`} className={`ring ${ringClass}`}>
-      <circle cx="100" cy="100" r={radius} fill="none" stroke="#00ffff44" strokeWidth="2" />
-      {segments.map((label, i) => {
-        const r = (360 / segments.length) * i;
-        const x = 100 + radius * Math.cos((r - 90) * Math.PI / 180);
-        const y = 100 + radius * Math.sin((r - 90) * Math.PI / 180);
-        return (
-          <text
-            key={i}
-            x={x}
-            y={y}
-            textAnchor="middle"
-            alignmentBaseline="middle"
-            transform={`rotate(${r}, ${x}, ${y})`}
-            className={`ring-text ring-${radius}`}
-          >
-            {label}
-          </text>
-        );
-      })}
-    </g>
-  );
+  const drawSegments = (segments, radius, ringClass, angle) => {
+    const anglePer = 360 / segments.length;
+    return (
+      <g
+        transform={`rotate(${angle}, 100, 100)`}
+        className={`ring ${ringClass}`}
+      >
+        {segments.map((label, i) => {
+          const startAngle = i * anglePer;
+          const endAngle = (i + 1) * anglePer;
+          const largeArc = anglePer > 180 ? 1 : 0;
+          const x1 = 100 + radius * Math.cos((Math.PI / 180) * (startAngle - 90));
+          const y1 = 100 + radius * Math.sin((Math.PI / 180) * (startAngle - 90));
+          const x2 = 100 + radius * Math.cos((Math.PI / 180) * (endAngle - 90));
+          const y2 = 100 + radius * Math.sin((Math.PI / 180) * (endAngle - 90));
+
+          const pathData = `
+            M 100 100
+            L ${x1} ${y1}
+            A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2}
+            Z
+          `;
+
+          const midAngle = (startAngle + endAngle) / 2;
+          const textX = 100 + (radius - 15) * Math.cos((midAngle - 90) * Math.PI / 180);
+          const textY = 100 + (radius - 15) * Math.sin((midAngle - 90) * Math.PI / 180);
+
+          return (
+            <g key={i}>
+              <path d={pathData} fill={`hsl(${i * 40}, 70%, 45%)`} stroke="#111" strokeWidth="0.5" />
+              <text
+                x={textX}
+                y={textY}
+                textAnchor="middle"
+                alignmentBaseline="middle"
+                transform={`rotate(${midAngle}, ${textX}, ${textY})`}
+                className="segment-text"
+              >
+                {label}
+              </text>
+            </g>
+          );
+        })}
+      </g>
+    );
+  };
 
   return (
     <div className="vortex-container">
@@ -70,10 +93,10 @@ export default function App() {
       <div className="wheel-wrapper">
         <div className="pointer" />
         <div className="wheel">
-          <svg className="wheel-svg" viewBox="0 0 200 200">
-            {renderRing(outerSegments, 80, angleOuter, 'outer-ring')}
-            {renderRing(middleSegments, 60, angleMiddle, 'middle-ring')}
-            {renderRing(innerSegments, 40, angleInner, 'inner-ring')}
+          <svg viewBox="0 0 200 200" className="wheel-svg">
+            {drawSegments(outerSegments, 80, 'outer', angleOuter)}
+            {drawSegments(middleSegments, 60, 'middle', angleMiddle)}
+            {drawSegments(innerSegments, 40, 'inner', angleInner)}
           </svg>
         </div>
         <div className="center-button">☁</div>
