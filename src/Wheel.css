@@ -1,66 +1,90 @@
+Apologies\! It seems I forgot to include the actual updated CSS code in my previous response. My bad\!
+
+Here's the **updated `Wheel.css`** based on the screenshot you provided. This CSS aims to replicate the dark, layered, and futuristic look of the AGP Vortex game on 9kboss.com.
+
+I've focused on:
+
+  * A deeper, richer background.
+  * More pronounced shadows and glows.
+  * Refined button styles with a more prominent border.
+  * Adjustments to the wheel and pointer to match the screenshot's aesthetic.
+
+<!-- end list -->
+
+```css
 /* General Body and Container Styles */
 body {
     margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern, clean font */
-    background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460); /* Deep, futuristic gradient */
+    font-family: 'Montserrat', sans-serif; /* Modern, slightly more geometric font */
+    background: linear-gradient(135deg, #0a0a1a, #0d0d21, #080812); /* Very deep, dark gradient */
     color: #e0e0e0; /* Light text for contrast */
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     overflow: hidden; /* Prevent scrollbars */
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
 }
 
 .vortex-container {
-    background-color: rgba(0, 0, 0, 0.7); /* Slightly transparent dark background */
+    background-color: rgba(10, 10, 20, 0.85); /* Slightly transparent dark background */
     border-radius: 20px;
-    padding: 30px;
-    box-shadow: 0 10px 30px rgba(0, 255, 255, 0.3); /* Cyan glow */
+    padding: 35px; /* Slightly more padding */
+    box-shadow: 0 15px 40px rgba(0, 255, 255, 0.4); /* Stronger cyan glow */
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 25px; /* Space between elements */
+    gap: 30px; /* More space between elements */
     position: relative;
     overflow: hidden;
-    width: 90%;
-    max-width: 500px; /* Constrain max width for better mobile experience */
-    border: 1px solid rgba(0, 255, 255, 0.5); /* Subtle cyan border */
+    width: 95%; /* Make it a bit wider */
+    max-width: 550px; /* Constrain max width for better mobile experience */
+    border: 2px solid rgba(0, 255, 255, 0.6); /* More prominent cyan border */
+    transform: perspective(1000px) rotateX(5deg); /* Slight 3D tilt */
+    transition: transform 0.3s ease-out;
+}
+
+.vortex-container:hover {
+    transform: perspective(1000px) rotateX(2deg); /* Reduce tilt on hover */
 }
 
 /* Title Styling */
 .vortex-title {
-    font-size: 2.8em;
+    font-size: 3em; /* Larger title */
     color: #00ffff; /* Bright cyan */
-    text-shadow: 0 0 15px rgba(0, 255, 255, 0.7); /* Glowing effect */
-    margin-bottom: 20px;
-    letter-spacing: 2px;
-    font-weight: 700;
+    text-shadow: 0 0 20px rgba(0, 255, 255, 0.8), 0 0 30px rgba(0, 255, 255, 0.6); /* More intense glowing effect */
+    margin-bottom: 25px;
+    letter-spacing: 3px; /* More spaced letters */
+    font-weight: 800; /* Bolder */
+    background: linear-gradient(90deg, #00ffff, #00bfff); /* Gradient text effect */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 /* Wheel Wrapper and Pointer */
 .wheel-wrapper {
     position: relative;
-    width: 350px; /* Larger wheel */
-    height: 350px;
+    width: 380px; /* Even larger wheel */
+    height: 380px;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
 }
 
 .pointer {
     position: absolute;
-    top: -25px; /* Position above the wheel */
+    top: -20px; /* Position above the wheel */
     left: 50%;
     transform: translateX(-50%);
     width: 0;
     height: 0;
-    border-left: 15px solid transparent;
-    border-right: 15px solid transparent;
-    border-bottom: 30px solid #ffdd00; /* Bright yellow pointer */
+    border-left: 20px solid transparent; /* Larger pointer base */
+    border-right: 20px solid transparent;
+    border-bottom: 40px solid #ffd700; /* Gold pointer */
     z-index: 10;
-    filter: drop-shadow(0 0 10px rgba(255, 221, 0, 0.8)); /* Yellow glow */
+    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.9)); /* Stronger gold glow */
 }
 
 /* Wheel Styling */
@@ -68,11 +92,12 @@ body {
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    border: 10px solid #333; /* Dark border for separation */
-    box-shadow: 0 0 30px rgba(0, 255, 255, 0.6), inset 0 0 20px rgba(0, 255, 255, 0.4); /* Outer and inner glow */
+    border: 12px solid #2a2a2a; /* Thicker dark border for separation */
+    box-shadow: 0 0 40px rgba(0, 255, 255, 0.8), inset 0 0 25px rgba(0, 255, 255, 0.5); /* Stronger outer and inner glow */
     position: relative;
-    overflow: hidden; /* Crucial for segment rendering */
+    overflow: hidden;
     transition: transform 4s ease-out; /* Smooth spin transition */
+    background: radial-gradient(circle at center, #1a1a2e 0%, #0f1020 100%); /* Subtle radial gradient for base */
 }
 
 .wheel-svg {
@@ -85,7 +110,8 @@ body {
 .wheel-svg text {
     font-weight: bold;
     fill: #ffffff; /* White text for better readability */
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8); /* Stronger text shadow */
+    font-size: 16px; /* Larger font for rewards */
 }
 
 /* Center Button of the Wheel */
@@ -94,62 +120,68 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 80px; /* Size of the center circle */
-    height: 80px;
-    background: linear-gradient(45deg, #00ffff, #00bfff); /* Cyan to light blue gradient */
+    width: 90px; /* Larger center circle */
+    height: 90px;
+    background: linear-gradient(45deg, #00eaff, #00aaff); /* Brighter cyan to blue gradient */
     border-radius: 50%;
-    border: 5px solid #fff;
-    box-shadow: 0 0 20px rgba(0, 255, 255, 0.8), inset 0 0 10px rgba(255, 255, 255, 0.5);
-    z-index: 5; /* Ensure it's above segments */
-    cursor: pointer; /* Indicates interactivity */
+    border: 6px solid #fff; /* Thicker white border */
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.9), inset 0 0 15px rgba(255, 255, 255, 0.6); /* More intense glow */
+    z-index: 5;
+    cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.2em;
+    font-size: 1.4em;
     font-weight: bold;
-    color: #333; /* Dark text for contrast */
+    color: #222; /* Darker text for contrast */
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 /* Spin Button */
 .spin-btn {
-    background: linear-gradient(90deg, #ff6b6b, #ee5253); /* Reddish-orange gradient */
+    background: linear-gradient(90deg, #ff4d4d, #e03d3d); /* Brighter red gradient */
     color: #fff;
     border: none;
-    padding: 15px 40px;
-    font-size: 1.6em;
+    padding: 18px 45px; /* Larger padding */
+    font-size: 1.8em; /* Larger text */
     font-weight: bold;
-    border-radius: 50px; /* Pill-shaped button */
+    border-radius: 55px; /* More rounded */
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 8px 20px rgba(255, 107, 107, 0.5); /* Soft glow */
+    box-shadow: 0 10px 25px rgba(255, 77, 77, 0.6), inset 0 0 15px rgba(255, 255, 255, 0.3); /* Stronger glow and inner highlight */
     text-transform: uppercase;
-    letter-spacing: 1.5px;
+    letter-spacing: 2px;
+    border: 2px solid rgba(255, 255, 255, 0.4); /* White border for definition */
 }
 
 .spin-btn:hover {
-    background: linear-gradient(90deg, #ee5253, #ff6b6b);
-    transform: translateY(-3px); /* Slight lift on hover */
-    box-shadow: 0 12px 25px rgba(255, 107, 107, 0.7);
+    background: linear-gradient(90deg, #e03d3d, #ff4d4d);
+    transform: translateY(-5px); /* More pronounced lift on hover */
+    box-shadow: 0 15px 30px rgba(255, 77, 77, 0.8), inset 0 0 20px rgba(255, 255, 255, 0.5);
 }
 
 .spin-btn:disabled {
-    background: #555;
+    background: linear-gradient(90deg, #444, #333);
     cursor: not-allowed;
     box-shadow: none;
-    opacity: 0.7;
+    opacity: 0.6;
+    border-color: rgba(255, 255, 255, 0.1);
+    transform: none;
 }
 
 /* Balance and Result Displays */
 .balance, .result {
-    font-size: 1.5em;
+    font-size: 1.7em; /* Larger text */
     font-weight: bold;
-    margin-top: 15px;
-    padding: 10px 20px;
-    border-radius: 10px;
-    background-color: rgba(255, 255, 255, 0.1); /* Slightly transparent background */
-    backdrop-filter: blur(5px); /* Frosted glass effect */
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3); /* Cyan glow */
+    margin-top: 20px;
+    padding: 12px 25px;
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.12); /* Slightly more transparent background */
+    backdrop-filter: blur(8px); /* More blurred frosted glass effect */
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.4); /* Stronger cyan glow */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 .balance {
@@ -158,37 +190,90 @@ body {
 
 .result {
     color: #ffd700; /* Gold for result */
-    animation: pulse 1.5s infinite; /* Gentle pulsing animation for result */
+    animation: pulse 1.5s infinite ease-in-out; /* Smoother pulse animation */
 }
 
 /* Keyframe for Result Pulse */
 @keyframes pulse {
     0% {
         transform: scale(1);
-        box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
     }
     50% {
-        transform: scale(1.03);
-        box-shadow: 0 0 25px rgba(0, 255, 255, 0.6);
+        transform: scale(1.05); /* Slightly larger scale */
+        box-shadow: 0 0 35px rgba(0, 255, 255, 0.7); /* Stronger glow at peak */
     }
     100% {
         transform: scale(1);
-        box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
     }
 }
 
 /* Responsive adjustments */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+    .vortex-container {
+        padding: 25px;
+        gap: 25px;
+        width: 95%;
+        max-width: 450px;
+    }
+    .vortex-title {
+        font-size: 2.5em;
+    }
+    .wheel-wrapper {
+        width: 320px;
+        height: 320px;
+        margin-bottom: 30px;
+    }
+    .spin-btn {
+        padding: 15px 35px;
+        font-size: 1.6em;
+    }
+    .balance, .result {
+        font-size: 1.5em;
+    }
+    .wheel-svg text {
+        font-size: 14px;
+    }
+    .center-button {
+        width: 80px;
+        height: 80px;
+        font-size: 1.2em;
+    }
+}
+
+@media (max-width: 480px) {
     .vortex-container {
         padding: 20px;
         gap: 20px;
+        border-radius: 15px;
     }
     .vortex-title {
         font-size: 2em;
+        letter-spacing: 2px;
+        margin-bottom: 15px;
     }
     .wheel-wrapper {
-        width: 300px;
-        height: 300px;
+        width: 280px;
+        height: 280px;
+        margin-bottom: 25px;
+    }
+    .pointer {
+        border-left: 15px solid transparent;
+        border-right: 15px solid transparent;
+        border-bottom: 30px solid #ffd700;
+        top: -15px;
+    }
+    .wheel {
+        border-width: 10px;
+    }
+    .wheel-svg text {
+        font-size: 12px;
+    }
+    .center-button {
+        width: 70px;
+        height: 70px;
+        font-size: 1.1em;
     }
     .spin-btn {
         padding: 12px 30px;
@@ -196,8 +281,7 @@ body {
     }
     .balance, .result {
         font-size: 1.3em;
-    }
-    .wheel-svg text {
-        font-size: 10px; /* Adjust text size for smaller screens */
+        padding: 10px 20px;
     }
 }
+```
