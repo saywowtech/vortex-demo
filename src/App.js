@@ -1,6 +1,6 @@
-// Final Vortex Game - Realistic UI Matching 9KBoss Style (with Arrow Fix)
+// Final Vortex Game - Updated Rotation with Arrow Fix (90° offset correction)
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import './Wheel.css';
 
 const outerRewards = [
@@ -18,7 +18,6 @@ export default function VortexGame() {
   const [balance, setBalance] = useState(1000);
   const [result, setResult] = useState(null);
   const [spinning, setSpinning] = useState(false);
-  const [rotationDeg, setRotationDeg] = useState(0);
   const wheelRef = useRef(null);
   const spinSoundRef = useRef(null);
   const winSoundRef = useRef(null);
@@ -29,8 +28,7 @@ export default function VortexGame() {
     const anglePerSlice = 360 / outerRewards.length;
     const index = Math.floor(Math.random() * outerRewards.length);
     const extraSpins = 10;
-    const finalDeg = 360 * extraSpins + index * anglePerSlice + anglePerSlice / 2; // +half slice aligns center with arrow
-    setRotationDeg(finalDeg);
+    const finalDeg = 360 * extraSpins + index * anglePerSlice + anglePerSlice / 2 + 90; // <-- +90 to align pointer at top
 
     if (spinSoundRef.current) spinSoundRef.current.play();
 
