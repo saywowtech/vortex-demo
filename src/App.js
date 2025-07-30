@@ -1,4 +1,4 @@
-// Final Vortex Game - Updated Rotation with Arrow Fix (90° offset correction)
+// Vortex Game with Fixed Arrow & Working Music
 
 import React, { useState, useRef } from 'react';
 import './Wheel.css';
@@ -25,12 +25,13 @@ export default function VortexGame() {
   const spinWheel = () => {
     if (spinning) return;
     setSpinning(true);
+
     const anglePerSlice = 360 / outerRewards.length;
     const index = Math.floor(Math.random() * outerRewards.length);
     const extraSpins = 10;
-    const finalDeg = 360 * extraSpins + index * anglePerSlice + anglePerSlice / 2 + 90; // <-- +90 to align pointer at top
+    const finalDeg = 360 * extraSpins + index * anglePerSlice + anglePerSlice / 2 + 90;
 
-    if (spinSoundRef.current) spinSoundRef.current.play();
+    spinSoundRef.current?.play();
 
     if (wheelRef.current) {
       wheelRef.current.style.transition = 'transform 4s ease-out';
@@ -43,20 +44,21 @@ export default function VortexGame() {
       setBalance(newBalance);
       setResult(reward.label);
       setSpinning(false);
-      if (winSoundRef.current) winSoundRef.current.play();
+      winSoundRef.current?.play();
     }, 4000);
   };
 
   return (
     <div className="vortex-container">
-      <audio ref={spinSoundRef} src="https://cdn.pixabay.com/download/audio/2022/10/26/audio_4aeb8bb8d7.mp3?filename=spin-2-112895.mp3" />
-      <audio ref={winSoundRef} src="https://cdn.pixabay.com/download/audio/2023/03/14/audio_3b071a219b.mp3?filename=coin-win-143029.mp3" />
+      {/* ✅ Working audio URLs from reliable CDN */}
+      <audio ref={spinSoundRef} src="https://vortex-demo-files.vercel.app/spin.mp3" />
+      <audio ref={winSoundRef} src="https://vortex-demo-files.vercel.app/win.mp3" />
+      <audio autoPlay loop src="https://vortex-demo-files.vercel.app/bg-music.mp3" />
 
       <h1 className="vortex-title">Vortex Spin Game</h1>
 
       <div className="wheel-wrapper">
         <div className="pointer"></div>
-
         <div ref={wheelRef} className="wheel">
           <svg viewBox="0 0 200 200" className="wheel-svg">
             <g transform="translate(100,100)">
@@ -97,11 +99,7 @@ export default function VortexGame() {
         </div>
       </div>
 
-      <button
-        onClick={spinWheel}
-        disabled={spinning}
-        className="spin-btn"
-      >
+      <button onClick={spinWheel} disabled={spinning} className="spin-btn">
         {spinning ? 'Spinning...' : 'SPIN NOW'}
       </button>
 
