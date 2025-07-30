@@ -1,158 +1,112 @@
-/* Import Google Fonts for a closer match (Montserrat, Rajdhani, Orbitron could be good) */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap');
+// Final Vortex Game - Updated Rotation with Arrow Fix (90° offset correction)
 
-/* General Body and Container Styles */
-body {
-    margin: 0;
-    font-family: 'Rajdhani', sans-serif; /* A sharp, techy font */
-    background: linear-gradient(180deg, #10151c 0%, #0a0e13 100%); /* Dark, subtle gradient background */
-    color: #e0e0e0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    overflow: hidden;
-    box-sizing: border-box;
-    /* Adding subtle noise/texture from the background */
-    background-image: url('data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjAwIDIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8ZmlsdGVyIGlkPSJub2lzZSI+CiAgICA8ZnRhYmxlVHJhbnNmZXIgZnVuY3Rpb249ImlkZW50aXR5Ii8+CiAgICA8ZmVOb2lzZSB0eXBlPSJmcmFjdGFsVHVyYnVsZW5jZSIgYmFzZUZyZXF1ZW5jeT0iMC41IiBudW1PY3RhdmVzPSI0IiBzdGl0Y2hUaWxlcz0ic3RpY2hBIi8+CiAgPC9mYWx0ZXI+CiAgPHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNub2lzZSkiIG9wYWNpdHk9IjAuMDMiLz4KPC9zdmc+');
-    background-size: cover;
+import React, { useState, useRef } from 'react';
+import './Wheel.css';
+
+const outerRewards = [
+  { label: '10X', multiplier: 10, color: '#FF4C60' },
+  { label: '8X', multiplier: 8, color: '#FFA94D' },
+  { label: '6X', multiplier: 6, color: '#FFD93D' },
+  { label: '5X', multiplier: 5, color: '#6BCB77' },
+  { label: '4X', multiplier: 4, color: '#4D96FF' },
+  { label: '3X', multiplier: 3, color: '#845EC2' },
+  { label: '2X', multiplier: 2, color: '#F94C66' },
+  { label: '0X', multiplier: 0, color: '#333333' },
+];
+
+export default function VortexGame() {
+  const [balance, setBalance] = useState(1000);
+  const [result, setResult] = useState(null);
+  const [spinning, setSpinning] = useState(false);
+  const wheelRef = useRef(null);
+  const spinSoundRef = useRef(null);
+  const winSoundRef = useRef(null);
+
+  const spinWheel = () => {
+    if (spinning) return;
+    setSpinning(true);
+    const anglePerSlice = 360 / outerRewards.length;
+    const index = Math.floor(Math.random() * outerRewards.length);
+    const extraSpins = 10;
+    const finalDeg = 360 * extraSpins + index * anglePerSlice + anglePerSlice / 2 + 90;
+
+    if (spinSoundRef.current) spinSoundRef.current.play();
+
+    if (wheelRef.current) {
+      wheelRef.current.style.transition = 'transform 4s ease-out';
+      wheelRef.current.style.transform = `rotate(-${finalDeg}deg)`;
+    }
+
+    setTimeout(() => {
+      const reward = outerRewards[index];
+      const newBalance = Math.floor(balance * reward.multiplier);
+      setBalance(newBalance);
+      setResult(reward.label);
+      setSpinning(false);
+      if (winSoundRef.current) winSoundRef.current.play();
+    }, 4000);
+  };
+
+  return (
+    <div className="vortex-container">
+      <audio ref={spinSoundRef} src="https://vortex-demo-files.vercel.app/spin.mp3" />
+      <audio ref={winSoundRef} src="https://vortex-demo-files.vercel.app/win.mp3" />
+
+      <h1 className="vortex-title">Vortex Spin Game</h1>
+
+      <div className="wheel-wrapper">
+        <div className="pointer"></div>
+
+        <div ref={wheelRef} className="wheel">
+          <svg viewBox="0 0 200 200" className="wheel-svg">
+            <g transform="translate(100,100)">
+              {outerRewards.map((r, i) => {
+                const angle = 360 / outerRewards.length;
+                const startAngle = angle * i;
+                const endAngle = startAngle + angle;
+                const largeArc = angle > 180 ? 1 : 0;
+                const x1 = 90 * Math.cos((Math.PI * startAngle) / 180);
+                const y1 = 90 * Math.sin((Math.PI * startAngle) / 180);
+                const x2 = 90 * Math.cos((Math.PI * endAngle) / 180);
+                const y2 = 90 * Math.sin((Math.PI * endAngle) / 180);
+                const midAngle = startAngle + angle / 2;
+                return (
+                  <g key={i}>
+                    <path
+                      d={`M0,0 L${x1},${y1} A90,90 0 ${largeArc} 1 ${x2},${y2} Z`}
+                      fill={r.color}
+                      stroke="#000"
+                      strokeWidth="1"
+                    />
+                    <text
+                      x={(60 * Math.cos((Math.PI * midAngle) / 180)).toFixed(2)}
+                      y={(60 * Math.sin((Math.PI * midAngle) / 180)).toFixed(2)}
+                      textAnchor="middle"
+                      alignmentBaseline="middle"
+                      fontSize="12"
+                      fill="#fff"
+                    >
+                      {r.label}
+                    </text>
+                  </g>
+                );
+              })}
+            </g>
+          </svg>
+          <div className="center-button">VORTEX</div>
+        </div>
+      </div>
+
+      <button
+        onClick={spinWheel}
+        disabled={spinning}
+        className="spin-btn"
+      >
+        {spinning ? 'Spinning...' : 'SPIN NOW'}
+      </button>
+
+      <div className="balance">Balance: {balance} coins</div>
+      {result && <div className="result">You got: {result}</div>}
+    </div>
+  );
 }
-
-.vortex-container {
-    background: linear-gradient(180deg, #151d27 0%, #0d1218 100%); /* Darker, slightly blue-tinted panel background */
-    border-radius: 15px; /* Slightly less rounded */
-    padding: 30px;
-    box-shadow: 0 5px 25px rgba(0, 200, 255, 0.2), inset 0 0 10px rgba(0, 255, 255, 0.05); /* Softer, more diffuse glow */
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 25px;
-    position: relative;
-    overflow: hidden;
-    width: 90%;
-    max-width: 450px; /* Constrain max width more to match screenshot proportions */
-    border: 1px solid rgba(0, 150, 200, 0.3); /* Subtle light blue border */
-    position: relative;
-}
-
-/* Pseudo-element for the subtle inner border/glow effect on the container */
-.vortex-container::before {
-    content: '';
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    right: 5px;
-    bottom: 5px;
-    border: 1px solid rgba(0, 255, 255, 0.1);
-    border-radius: 12px;
-    pointer-events: none;
-}
-
-
-/* Top Info Bar (if you add specific divs for these) */
-.info-bar {
-    display: flex;
-    justify-content: space-around;
-    width: 100%;
-    margin-bottom: 20px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1.1em;
-    color: #a0a8b3; /* Softer text color */
-}
-
-.info-item {
-    background-color: #0e141a;
-    padding: 8px 15px;
-    border-radius: 8px;
-    border: 1px solid rgba(0, 200, 255, 0.1);
-    box-shadow: inset 0 0 5px rgba(0, 200, 255, 0.05);
-}
-
-/* Title Styling */
-.vortex-title {
-    font-family: 'Orbitron', sans-serif; /* Futuristic font for title */
-    font-size: 2.5em; /* Adjusted size */
-    color: #00ffff;
-    text-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
-    margin-bottom: 20px;
-    letter-spacing: 2px;
-    font-weight: 600;
-    text-transform: uppercase;
-}
-
-/* Wheel Wrapper and Pointer */
-.wheel-wrapper {
-    position: relative;
-    width: 320px; /* Adjusted size to match screenshot more closely */
-    height: 320px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 30px;
-}
-
-.pointer {
-    position: absolute;
-    top: -20px; /* Position above the wheel */
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 0;
-    border-left: 15px solid transparent;
-    border-right: 15px solid transparent;
-    border-bottom: 30px solid #FFD700; /* Gold */
-    z-index: 10;
-    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.7));
-}
-
-/* Small circular element at the base of the pointer */
-.pointer::after {
-    content: '';
-    position: absolute;
-    bottom: -5px; /* Adjust to sit at the tip of the triangle */
-    left: -8px; /* Half of width of pointer base for centering */
-    width: 16px;
-    height: 16px;
-    background-color: #FFD700;
-    border-radius: 50%;
-    box-shadow: 0 0 5px rgba(255, 215, 0, 0.8);
-}
-
-
-/* Wheel Styling - Main Wheel */
-.wheel {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    border: 8px solid #202b33; /* Darker, slightly blue-grey border */
-    box-shadow: 0 0 25px rgba(0, 255, 255, 0.3), inset 0 0 15px rgba(0, 255, 255, 0.1); /* Subtler glow */
-    position: relative;
-    overflow: hidden;
-    transition: transform 4s ease-out;
-    background: radial-gradient(circle at center, #1a232e 0%, #10151c 100%); /* Dark radial gradient */
-}
-
-.wheel-svg {
-    width: 100%;
-    height: 100%;
-    transform: rotate(-90deg); /* Keep this for segment alignment */
-}
-
-/* SVG Text within Wheel */
-.wheel-svg text {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 600; /* Slightly bolder */
-    fill: #ffffff;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
-    font-size: 14px; /* Adjusted size for screenshot */
-}
-
-/* Center Button of the Wheel (The "VORTEX" part) */
-.center-button {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 120px; /* Larger central area */
-    height: 120
