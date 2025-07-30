@@ -1,3 +1,5 @@
+// App.js
+
 import React, { useState, useRef } from 'react';
 import './Wheel.css';
 
@@ -12,7 +14,7 @@ const outerRewards = [
   { label: '0X', multiplier: 0, color: '#333333' },
 ];
 
-export default function VortexGame() {
+export default function App() {
   const [balance, setBalance] = useState(1000);
   const [result, setResult] = useState(null);
   const [spinning, setSpinning] = useState(false);
@@ -95,11 +97,7 @@ export default function VortexGame() {
         </div>
       </div>
 
-      <button
-        onClick={spinWheel}
-        disabled={spinning}
-        className="spin-btn"
-      >
+      <button onClick={spinWheel} disabled={spinning} className="spin-btn">
         {spinning ? 'Spinning...' : 'SPIN NOW'}
       </button>
 
