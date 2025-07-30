@@ -30,7 +30,7 @@ const App = ({ minimumAmount = 5, currency = '₹' }) => {
     setTimeout(() => setIsSpinning(false), 4000);
   };
 
-  const renderLabels = (radius, size = 'text-sm') =>
+  const renderLabels = (radius, size = 'text-sm') => (
     multipliers.map((value, index) => {
       const angle = (index * 30 - 90) * (Math.PI / 180);
       const x = Math.cos(angle) * radius;
@@ -38,37 +38,35 @@ const App = ({ minimumAmount = 5, currency = '₹' }) => {
       return (
         <div
           key={`${radius}-${index}`}
-          className={`absolute ${size} font-bold text-white`}
+          className={`absolute ${size} font-bold text-white pointer-events-none`}
           style={{
-            left: `calc(50% + ${x}px - 18px)`,
-            top: `calc(50% + ${y}px - 12px)`,
-            width: '36px',
-            textAlign: 'center',
+            left: `calc(50% + ${x}px - 16px)`,
+            top: `calc(50% + ${y}px - 10px)`,
+            width: '32px',
+            textAlign: 'center'
           }}
         >
           {value}
         </div>
       );
-    });
+    })
+  );
 
-  const renderSegments = (count, radius) => {
-    const lines = [];
-    for (let i = 0; i < count; i++) {
-      const angle = (i * 360) / count;
-      const rotate = `rotate(${angle}deg)`;
-      lines.push(
-        <div
-          key={i}
-          className="absolute left-1/2 top-1/2 w-px h-[48%] bg-gray-700"
-          style={{
-            transform: `${rotate} translateY(-50%)`,
-            transformOrigin: 'bottom center',
-          }}
-        />
-      );
-    }
-    return lines;
-  };
+  const renderDividers = (radius) => (
+    multipliers.map((_, index) => (
+      <div
+        key={`line-${radius}-${index}`}
+        className="absolute w-px bg-gray-600"
+        style={{
+          height: `${radius}px`,
+          left: '50%',
+          top: '50%',
+          transform: `rotate(${index * 30}deg) translateY(-${radius}px)`,
+          transformOrigin: 'bottom center'
+        }}
+      />
+    ))
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white relative overflow-hidden">
@@ -85,31 +83,19 @@ const App = ({ minimumAmount = 5, currency = '₹' }) => {
 
         <div className="flex-1 flex justify-center">
           <div className="relative w-96 h-96">
-            {/* Outer ring */}
-            <div
-              ref={outerRef}
-              className="absolute inset-0 rounded-full border-4 border-gray-600 bg-gradient-to-br from-gray-800 to-gray-900"
-            >
-              {renderLabels(150)}
-              {renderSegments(12, 150)}
+            <div ref={outerRef} className="absolute inset-0 rounded-full border-4 border-gray-600 bg-gradient-to-br from-gray-800 to-gray-900 z-30">
+              {renderLabels(140)}
+              {renderDividers(140)}
             </div>
 
-            {/* Middle ring */}
-            <div
-              ref={middleRef}
-              className="absolute inset-8 rounded-full border-4 border-gray-700 bg-gradient-to-br from-gray-700 to-gray-800"
-            >
-              {renderLabels(110, 'text-xs')}
-              {renderSegments(12, 110)}
+            <div ref={middleRef} className="absolute inset-8 rounded-full border-4 border-gray-700 bg-gradient-to-br from-gray-700 to-gray-800 z-20">
+              {renderLabels(100, 'text-xs')}
+              {renderDividers(100)}
             </div>
 
-            {/* Inner ring */}
-            <div
-              ref={innerRef}
-              className="absolute inset-16 rounded-full border-4 border-gray-600 bg-gradient-to-br from-gray-600 to-gray-700"
-            >
-              {renderLabels(70, 'text-[10px]')}
-              {renderSegments(12, 70)}
+            <div ref={innerRef} className="absolute inset-16 rounded-full border-4 border-gray-600 bg-gradient-to-br from-gray-600 to-gray-700 z-10">
+              {renderLabels(60, 'text-[10px]')}
+              {renderDividers(60)}
               <div className="absolute inset-8 rounded-full bg-gradient-to-br from-gray-500 to-gray-600 flex items-center justify-center">
                 <div className="w-12 h-12 bg-gray-400 rounded-full flex items-center justify-center">
                   <div className="w-6 h-6 bg-gray-300 rounded-full"></div>
